@@ -25,7 +25,7 @@
 
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+<!--                <version>3.8.1</version>-->
                 <configuration>
                     <source>${maven.compiler.source}</source>
                     <target>${maven.compiler.target}</target>
@@ -46,7 +46,7 @@
                     <systemPropertyVariables>
                         <property>
                             <name>allure.results.directory</name>
-                            <value>${project.build.directory}/allure-results</value>
+                            <value>${project.build.directory}allure-results</value>
                         </property>
                     </systemPropertyVariables>
                 </configuration>

@@ -35,21 +35,29 @@ public class LoginPage {
         return signupButton.is(Condition.visible);
     }
 
-    public void inputEmail(String email){
-        emailInputField.setValue(email);
+    public void setUsername(String username) {
+        emailInputField.setValue(username);
     }
 
-    public void inputPassword(String password){
+    public void setPassword(String password) {
         passwordInputField.setValue(password);
     }
 
-    public void clickSubmitButton(){
+    public void clickSubmitButton() {
         submitButton.click();
     }
 
-    public String getEmailInputValue(){
+    public String getEmailInputValue() {
         return emailInputField.getValue();
     }
 
+    public String getPasswordInputValue(){
+        return passwordInputField.getValue();
+    }
+
+    public String getErrorMessageText(){
+        errorMessage.shouldBe(Condition.visible);
+        return errorMessage.getText();
+    }
 
 }
