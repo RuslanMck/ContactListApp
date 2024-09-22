@@ -3,53 +3,67 @@ package pages;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.WebDriverRunner;
 import lombok.Getter;
 
 
 @Getter
 public class LoginPage {
 
-    private SelenideElement emailInputField = Selenide.$("#email");
-    private SelenideElement passwordInputField = Selenide.$("#password");
-    private SelenideElement submitButton = Selenide.$("#submit");
-    private SelenideElement errorMessage = Selenide.$("#error");
-    private SelenideElement signupButton = Selenide.$("#signup");
+    private final SelenideElement EMAIL_INPUT_FIELD = Selenide.$("#email");
+    private final SelenideElement PASSWORD_INPUT_FIELD = Selenide.$("#password");
+    private final SelenideElement SUBMIT_BUTTON = Selenide.$("#submit");
+    private final SelenideElement VALIDATION_ERROR_MESSAGE = Selenide.$("#error");
+    private final SelenideElement SIGN_UP_BUTTON = Selenide.$("#signup");
 
     public boolean emailInputFieldVisibility() {
-        return emailInputField.is(Condition.visible);
+        return EMAIL_INPUT_FIELD.is(Condition.visible);
     }
 
     public boolean passwordInputFieldVisibility() {
-        return passwordInputField.is(Condition.visible);
+        return PASSWORD_INPUT_FIELD.is(Condition.visible);
     }
 
     public boolean submitButtonVisibility() {
-        return submitButton.is(Condition.visible);
+        return SUBMIT_BUTTON.is(Condition.visible);
     }
 
     public boolean errorMessageVisibility() {
-        return errorMessage.is(Condition.visible);
+        return VALIDATION_ERROR_MESSAGE.is(Condition.visible);
     }
 
     public boolean signupButtonVisibility() {
-        return signupButton.is(Condition.visible);
+        return SIGN_UP_BUTTON.is(Condition.visible);
     }
 
-    public void inputEmail(String email){
-        emailInputField.setValue(email);
+    public void setUsername(String username) {
+        EMAIL_INPUT_FIELD.setValue(username);
     }
 
-    public void inputPassword(String password){
-        passwordInputField.setValue(password);
+    public void setPassword(String password) {
+        PASSWORD_INPUT_FIELD.setValue(password);
     }
 
-    public void clickSubmitButton(){
-        submitButton.click();
+    public void clickSubmitButton() {
+        SUBMIT_BUTTON.click();
     }
 
-    public String getEmailInputValue(){
-        return emailInputField.getValue();
+    public String getEmailInputValue() {
+        return EMAIL_INPUT_FIELD.getValue();
     }
 
+    public String getPasswordInputValue(){
+        return PASSWORD_INPUT_FIELD.getValue();
+    }
+
+    public String getErrorMessageText(){
+        VALIDATION_ERROR_MESSAGE.shouldBe(Condition.visible);
+        return VALIDATION_ERROR_MESSAGE.getText();
+    }
+
+    public String clickSignUpButton(){
+        SIGN_UP_BUTTON.click();
+        return WebDriverRunner.getWebDriver().getCurrentUrl();
+    }
 
 }
