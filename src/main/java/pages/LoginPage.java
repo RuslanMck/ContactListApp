@@ -52,16 +52,16 @@ public class LoginPage {
         return EMAIL_INPUT_FIELD.getValue();
     }
 
-    public String getPasswordInputValue(){
+    public String getPasswordInputValue() {
         return PASSWORD_INPUT_FIELD.getValue();
     }
 
-    public String getErrorMessageText(){
+    public String getErrorMessageText() {
         VALIDATION_ERROR_MESSAGE.shouldBe(Condition.visible);
         return VALIDATION_ERROR_MESSAGE.getText();
     }
 
-    public String clickSignUpButton(){
+    public String clickSignUpButton() {
         SIGN_UP_BUTTON.click();
         return WebDriverRunner.getWebDriver().getCurrentUrl();
     }
