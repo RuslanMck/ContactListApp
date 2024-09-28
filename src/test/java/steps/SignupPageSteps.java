@@ -4,10 +4,12 @@ import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
 import pages.SignupPage;
 import pages.SignupPagePlaceholders;
+import testUsers.BasicUser;
 
 public class SignupPageSteps {
 
     private final SignupPage SIGNUP_PAGE = new SignupPage();
+
 
     @Step("Verify if the sign up form is visible for the user")
     public boolean checkSignupFormVisibility() {
@@ -36,6 +38,18 @@ public class SignupPageSteps {
             }
         }
         return true;
+    }
+
+    @Step("Verify the signup form validation error messages text matches the designs")
+    public String signupFormValidation(BasicUser user) {
+        SIGNUP_PAGE.populateSignupForm(user);
+        SIGNUP_PAGE.getSubmitButton().click();
+        return SIGNUP_PAGE.getErrorText();
+    }
+    @Step("Verify the signup for valid user")
+    public void signupValidUser(BasicUser user) {
+        SIGNUP_PAGE.populateSignupForm(user);
+        SIGNUP_PAGE.getSubmitButton().click();
     }
 
 
