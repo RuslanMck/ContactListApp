@@ -29,8 +29,7 @@ public class LoginPageTests {
         Assert.assertTrue(LOGIN_PAGE_STEPS.checkEmailInputVisibility());
     }
 
-    @Test(description = "Email can be populated", dataProviderClass = LoginDataProvider.class,
-            dataProvider = "usernameTestData")
+    @Test(description = "Email can be populated", dataProviderClass = LoginDataProvider.class, dataProvider = "usernameTestData")
     public void populateEmail(String email) {
         Assert.assertEquals(LOGIN_PAGE_STEPS.checkUsernameCanBeInputted(email), email);
     }
@@ -40,30 +39,28 @@ public class LoginPageTests {
         Assert.assertTrue(LOGIN_PAGE_STEPS.checkPasswordInputVisibility());
     }
 
-    @Test(description = "Password can be populated", dataProviderClass = LoginDataProvider.class
-    , dataProvider = "passwordTestData")
-    public void populatePassword(String password){
+    @Test(description = "Password can be populated", dataProviderClass = LoginDataProvider.class, dataProvider = "passwordTestData")
+    public void populatePassword(String password) {
         Assert.assertEquals(LOGIN_PAGE_STEPS.checkPasswordCanBePopulated(password), password);
     }
 
     @Test(description = "Login submit button is visible")
-    public void loginSubmitButtonVisibilityCheck(){
+    public void loginSubmitButtonVisibilityCheck() {
         Assert.assertTrue(LOGIN_PAGE_STEPS.checkLoginSubmitButtonVisibility());
     }
 
-    @Test(description = "Validation error is displayed", dataProviderClass = LoginDataProvider.class,
-            dataProvider = "loginAndPasswordTestData")
-    public void validationErrorMessageCheck(String username, String password){
+    @Test(description = "Validation error is displayed", dataProviderClass = LoginDataProvider.class, dataProvider = "loginAndPasswordTestData")
+    public void validationErrorMessageCheck(String username, String password) {
         Assert.assertEquals(LOGIN_PAGE_STEPS.checkValidationErrorMessage(username, password), VALIDATION_ERROR_MESSAGE);
     }
 
     @Test(description = "Sign up button is displayed")
-    public void signUpButtonVisibilityCheck(){
+    public void signUpButtonVisibilityCheck() {
         Assert.assertTrue(LOGIN_PAGE_STEPS.checkSignUpButtonVisibility());
     }
 
     @Test(description = "Sign up page navigation check")
-    public void singUpPageNavigationCheck(){
+    public void singUpPageNavigationCheck() {
         Assert.assertEquals(LOGIN_PAGE_STEPS.navigateToSignUpPage(), SIGN_UP_PAGE_URL);
         WebDriverRunner.getWebDriver().navigate().to(LOGIN_PAGE_URL);
     }
