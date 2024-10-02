@@ -4,7 +4,7 @@ import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
 import pages.SignupPage;
 import pages.SignupPagePlaceholders;
-import testUsers.BasicUser;
+import testUsers.SignupUser;
 
 public class SignupPageSteps {
 
@@ -32,7 +32,7 @@ public class SignupPageSteps {
         for (SelenideElement element : SIGNUP_PAGE.getSignupForm()) {
             String elementId = element.attr("id");
             boolean placeholderMatches = false;
-            placeholderMatches = element.getAttribute("placeholder").equals(SignupPagePlaceholders.valueOf(elementId.toUpperCase()).getPlaceholder());
+            placeholderMatches = element.getAttribute("placeholder").equals(SignupPagePlaceholders.valueOf(elementId.toUpperCase()).getPLACEHOLDER());
             if (!placeholderMatches) {
                 return false;
             }
@@ -41,13 +41,13 @@ public class SignupPageSteps {
     }
 
     @Step("Verify the signup form validation error messages text matches the designs")
-    public String signupFormValidation(BasicUser user) {
+    public String signupFormValidation(SignupUser user) {
         SIGNUP_PAGE.populateSignupForm(user);
         SIGNUP_PAGE.getSubmitButton().click();
         return SIGNUP_PAGE.getErrorText();
     }
     @Step("Verify the signup for valid user")
-    public void signupValidUser(BasicUser user) {
+    public void signupValidUser(SignupUser user) {
         SIGNUP_PAGE.populateSignupForm(user);
         SIGNUP_PAGE.getSubmitButton().click();
     }

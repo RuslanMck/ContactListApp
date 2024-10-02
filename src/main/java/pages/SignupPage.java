@@ -5,7 +5,7 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import lombok.Getter;
-import testUsers.BasicUser;
+import testUsers.SignupUser;
 
 import java.util.Objects;
 
@@ -23,7 +23,7 @@ public class SignupPage {
 
         for (SelenideElement element : signupForm) {
             String elementId = element.attr("id");
-            element.shouldHave(Condition.attribute("placeholder", SignupPagePlaceholders.valueOf(elementId.toUpperCase()).getPlaceholder()));
+            element.shouldHave(Condition.attribute("placeholder", SignupPagePlaceholders.valueOf(elementId.toUpperCase()).getPLACEHOLDER()));
         }
 
     }
@@ -37,7 +37,7 @@ public class SignupPage {
         return true;
     }
 
-    public void populateSignupForm(BasicUser user) {
+    public void populateSignupForm(SignupUser user) {
         for (SelenideElement element : signupForm) {
             switch (Objects.requireNonNull(element.getAttribute("id"))) {
                 case ("firstName"):

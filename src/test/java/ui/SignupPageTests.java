@@ -1,5 +1,6 @@
 package ui;
 
+import api.users.ApiUser;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.WebDriverRunner;
@@ -72,7 +73,7 @@ public class SignupPageTests {
 
     @AfterClass
     public void tearDown(){
-        //TODO Execute API request to delete signed up user. Authorization token can be taken from the POST Log In User
-        // request in the 'Contact List Documentation' Postman collection
+        String token = new ApiUser().logInWithParams(TEST_USERS.getValidUser().getEmail(), TEST_USERS.getValidUser().getPassword());
+        new ApiUser().deleteUser(token);
     }
 }

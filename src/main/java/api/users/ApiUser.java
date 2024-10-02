@@ -1,34 +1,82 @@
 package api.users;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import dto.UserDto;
+import helper.AllureRestBodyPrint;
+import io.qameta.allure.Allure;
+import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.RestAssured;
+import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.Header;
-import io.restassured.http.Headers;
+import io.restassured.path.json.JsonPath;
+import io.restassured.specification.RequestSpecification;
+import lombok.SneakyThrows;
+import org.testng.Assert;
+import patterns.ResponsePatterns;
 
 import java.io.File;
+import java.util.regex.Pattern;
 
 public class ApiUser {
 
     private static final String BASE_URL = "https://thinking-tester-contact-list.herokuapp.com";
-
-    private Headers loginHeaders = new Headers(new Header("Cookie", "token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NmZhYTVmY2FkZWI2MzAwMTMwZDZmYzEiLCJpYXQiOjE3Mjc3MDMyNDB9.HDa3MXa4KYkkQ8iDc9y5bNna1ePnJE_ZYF__2pIjvjU"), new Header("Content-Type", "application/json"));
-    private Headers signupHeaders = new Headers(new Header("Cookie", "token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NmZhYmQ0M2FkZWI2MzAwMTMwZDcwN2QiLCJpYXQiOjE3Mjc3MDg0ODN9.xLYoZhnQc8Jn3CcjbsRmbzIWI_CP_ldccDtBrko4xRM"), new Header("Content-Type", "application/json"));
+    private static String userToken = null;
 
 
-    public void logInUser() {
-        RestAssured.given()
-                .baseUri(BASE_URL)
-                .headers(loginHeaders)
+    public ApiUser() {
+        requestSpecification();
+    }
+
+    private RequestSpecification requestSpecification;
+
+    private void requestSpecification() {
+        requestSpecification = new RequestSpecBuilder()
+                .setBaseUri(BASE_URL)
+                .addHeader("Content-Type", "application/json")
+                .build();
+    }
+
+    @SneakyThrows
+    public String logInWithParams(String email, String password){
+        JsonPath responseBody = RestAssured.given()
+                .filter(new AllureRestAssured())
+                .spec(requestSpecification)
                 .body(new File("src/test/resources/userLoginBody.json"))
                 .when()
                 .post("/users/login")
                 .then()
-                .statusCode(200);
+                .statusCode(200)
+                .extract()
+                .body()
+                .jsonPath();
+
+        UserDto registrationResponseBody = new ObjectMapper().readValue(responseBody.prettyPrint(), UserDto.class);
+        return registrationResponseBody.getToken();
     }
 
-    public void deleteUser(String userToken){
+
+    public void logInUser() {
+
+        new AllureRestBodyPrint("Login User Request Body", "src/test/resources/userLoginBody.json");
+        JsonPath responseBody = RestAssured.given()
+                .filter(new AllureRestAssured())
+                .spec(requestSpecification)
+                .body(new File("src/test/resources/userLoginBody.json"))
+                .when()
+                .post("/users/login")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .jsonPath();
+
+        new AllureRestBodyPrint("Login User Response Body", responseBody);
+    }
+
+    public void deleteUser(String userToken) {
         RestAssured.given()
-                .baseUri(BASE_URL)
-                .headers(loginHeaders)
+                .filter(new AllureRestAssured())
+                .spec(requestSpecification)
                 .header(new Header("Authorization", userToken))
                 .when()
                 .delete("/users/me")
@@ -36,18 +84,34 @@ public class ApiUser {
                 .statusCode(200);
     }
 
-    public String registerUser(){
-        return RestAssured.given()
-                .baseUri(BASE_URL)
-                .header(new Header("Content-Type", "application/json"))
-                .body(new File("src/test/resources/userRegistrationBody.json"))
+    @SneakyThrows
+    public String registerUser() {
+
+        new AllureRestBodyPrint("Registration Request Body", "src/test/resources/userRegistrationRequestBody.json");
+
+        JsonPath responseBody = RestAssured.given()
+                .filter(new AllureRestAssured())
+                .spec(requestSpecification)
+                .body(new File("src/test/resources/userRegistrationRequestBody.json"))
                 .when()
                 .post("/users")
                 .then()
-                .log().all()
                 .statusCode(201).extract()
                 .body()
-                .jsonPath()
-                .getString("token");
+                .jsonPath();
+
+        UserDto registrationResponseBody = new ObjectMapper().readValue(responseBody.prettyPrint(), UserDto.class);
+
+        Assert.assertTrue(Pattern.matches(ResponsePatterns.TOKEN_PATTERN, registrationResponseBody.getToken()), "Token doesn't match expected pattern.");
+        Assert.assertTrue(Pattern.matches(ResponsePatterns.FIRST_NAME_PATTERN, registrationResponseBody.getUser().getFirstName()), "First Name doesn't match expected pattern.");
+        Assert.assertTrue(Pattern.matches(ResponsePatterns.LAST_NAME_PATTERN, registrationResponseBody.getUser().getLastName()), "Last Name doesn't match expected pattern.");
+        Assert.assertTrue(Pattern.matches(ResponsePatterns.EMAIL_PATTERN, registrationResponseBody.getUser().getEmail()), "Email doesn't match expected pattern.");
+
+        userToken = registrationResponseBody.getToken();
+
+        new AllureRestBodyPrint("Registration Response Body", responseBody);
+
+        return userToken;
     }
+
 }

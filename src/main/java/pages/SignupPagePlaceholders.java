@@ -7,13 +7,13 @@ public enum SignupPagePlaceholders {
     EMAIL("Email"),
     PASSWORD("Password");
 
-    private final String placeholder;
+    private final String PLACEHOLDER;
 
     SignupPagePlaceholders(String PLACEHOLDER){
-        this.placeholder = PLACEHOLDER;
+        this.PLACEHOLDER = PLACEHOLDER;
     }
 
-    public String getPlaceholder(){
-        return placeholder;
+    public String getPLACEHOLDER(){
+        return PLACEHOLDER;
     }
 }
